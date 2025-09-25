@@ -1,7 +1,7 @@
-Ben Hamilton
-Adventure Game
-September 25, 2025
-This is a basic choose your own adventure game.
+#Ben Hamilton
+#Adventure Game
+#September 25, 2025
+#This is a basic choose your own adventure game.
 
 game = {
       "start": ["You arrive at the opening of a mysterious portal.", "Enter the mysterious portal", "enter", "Deny the call to adventure", "deny"], 
@@ -21,28 +21,26 @@ game = {
       "armory": ["Good idea, run to the area filled with guards with sharp weapons. They quickly dispatch you.", "Return to start", "start", "Quit like a coward", "quit"], 
  }
 
-create main function
-	keepGoing gets true
-	create node variable that start's at "start"
-	create a while loop for when keepGoing is true
-		if node does not equal "quit"
-			node gets playGame(node)
+def main():
+    keepGoing = True
+    node = "start"
+    while(keepGoing):
+        if node != "quit":
+            node = playNode(node)
+            
+def playNode(node):
+    print(game[node][0])
+    print("1) ", game[node][1])
+    print("2) ", game[node][3])
+    response = input("Your choice (1/2): ")
+    if response == "1":
+        return game[node][2]
+    if response == "2":
+        return game[node][4]
+    else:
+        print("This is not a valid answer.")
+        return node
 
-create function playNode() with the argument (node)
-	print the discription of the current node
-	print option one of current node
-	print option two of current node
-	ask which option the user would prefer, one or two. give that to variable "response"
-	if user prefers 1 
-		return the node name for that choice
-	if user prefers 2 
-		return the node name for that choice
-	else
-		say "that isn't a valid option"
-		return the current node
-
-I'll be completely honest I spent a good 3 hours beating this over my head until I finally
-threw in the towel on the getGame() function. It's inclusion didn't make sense to me and 
-I struggled to find any way to make it work within the project. I'm sure that means my
-program is less clean than it would be if I had found the proper solution, but it was
-the best I could come up with without pulling out my hair.
+#def getGame(node, response):
+    
+main()
