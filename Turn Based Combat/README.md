@@ -145,3 +145,23 @@ define fight with fighter 1 and fighter 2
 		input "Press ENTER to continue..."
 
 #That should be basically everything for the basic fight
+#Now we need to create the combat module
+
+import the tbc module
+
+define main()
+	create a hero with the tbc.Character()
+	assign a name
+	assign hitPoints
+	assign hitChance
+	assign maxDamage
+	assign armor
+	
+	create a monster with the same stuff
+	
+	print hero stats
+	print monster stats
+	
+	run the fight function in the tbc module
+	
+run main
