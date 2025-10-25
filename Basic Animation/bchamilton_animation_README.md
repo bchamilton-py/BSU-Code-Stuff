@@ -71,4 +71,30 @@ define main function
 		if direction is right
 			frame_x adds the value of speed
 			if frame_x + 80 is greater than or equal to 640
-			#frame
+			#frame_x is the left corner of the sprite so I need the to turn 80 pixels earlier and 640 is the edge
+			#of the screen
+				walk_frames is pygames transform flipped for all its frames
+				direction is set to left
+		elif direction is left
+			frame_x subtracts the value of speed
+			if frame_x is less than or equal to 0
+				flip walk_frames back around
+				direction is right
+		else
+			frame_x is 0
+			direction is right
+			
+		#That may not be the cleanest code anyone's every written but I felt like Alan Turing after solving
+		#enigma finally making the sprite turn around instead keep on frolicing to the left like it was doing
+		
+		screen.blit background
+		screen.blit(frame, [frame_x, frame_y])
+		pygame.display.flip()
+		
+		#I'll be honest I've watched your videos, I've looked this up and it still doesn't make sense to me. It 
+		#doesn't work if I don't do it, so I do it, but the best I can tell you is it makes the screen not black 
+		#and it makes the sprite be where the sprite is meant to be. I suppose that's all it really needs to be isn't it.
+		
+	pygame.quit()
+	
+call main
