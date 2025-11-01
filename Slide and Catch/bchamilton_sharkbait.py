@@ -14,13 +14,12 @@ def loadScore():
         bestScore = 0
     return bestScore
 
-def bestScore(newScore):
-    bestScore = loadScore()
-    if bestScore >= newScore:
-        bestScore = bestScore
-    else:
-        bestScore = newScore
-    return bestScore
+def updateBestScore(newScore):
+    best = loadScore()
+    if newScore > best:
+        best = newScore
+        saveScore(best)
+    return best
 
 class Fish(simpleGE.Sprite):
     def __init__(self, scene):
@@ -85,16 +84,47 @@ class Game(simpleGE.Scene):
         super().__init__()
         self.setImage("Ocean.png")
         
+        self.hearts = 3
+        self.score = 0
+        
         self.sndFish = simpleGE.Sound("crunch.mp3")
         self.sndBomb = simpleGE.Sound("explosion.mp3")
         
         self.Shark = Shark(self)
-        self.Fish = Fish(self)
-        self.Bomb = Bomb(self)
+        self.Fish = []
+        for i in range(5):
+            self.Fish.append(Fish(self))
+        self.Bomb = []
+        for i in range(3):
+            self.Bomb.append(Bomb(self))
+            
+        self.lblScore = LblScore()
+        self.lblHearts = LblHearts()
         
         self.sprites = [self.Shark,
                         self.Fish,
-                        self.Bomb]
+                        self.Bomb,
+                        self.lblScore,
+                        self.lblHearts]
+    def process(self):
+        for fish in self.Fish:
+            if self.Shark.collidesWith(fish):
+                self.sndFish.play()
+                fish.reset()
+                self.score += 1
+                self.lblScore.text = f"Score: {self.score}"
+        
+        for bomb in self.Bomb:
+            if self.Shark.collidesWith(bomb):
+                self.sndBomb.play()
+                bomb.reset()
+                self.hearts -= 1
+                self.lblHearts.text = f"Lives: {self.hearts}"
+        
+        if self.hearts == 0:
+            print(f"Final Score: {self.score}")
+            newScore = self.score
+            self.stop()
 
 class Instructions(simpleGE.Scene):
     def __init__(self, score):
@@ -103,7 +133,7 @@ class Instructions(simpleGE.Scene):
         self.response = "Play"
         
         self.instructions = simpleGE.MultiLabel()
-        self.instructions.textlines = [
+        self.instructions.textLines = [
             "You are a shark.",
             "Your goal is to eat lots of fish,",
             "and avoid dynamite. Move with left and right keys",
@@ -143,15 +173,16 @@ class Instructions(simpleGE.Scene):
 def main():
     keepGoing = True
     newScore = 0
-    score = bestScore(newScore)
+    best = loadScore()
     while keepGoing:
-        instructions = Instructions(score)
+        instructions = Instructions(best)
         instructions.start()
         
         if instructions.response == "Play":
             game = Game()
             game.start()
             newScore = game.score
+            best = updateBestScore(newScore)
         else:
             keepGoing = False
             
